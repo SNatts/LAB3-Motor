@@ -127,6 +127,20 @@ int main(void)
 		  MotorReadRPM = 60/(64*12*(avgRisingEgdePeriod/1000000));
 //		  duty = MotorSetDuty*10;
 //		  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty);
+
+		  // Enable Set RPM
+		  if (MotorControlEnable == 1){
+			  // RPM = %duty*(MaxRPM/100)
+			  // VRef. 3.3V /approx Max 25 RPM
+			  duty = (MotorSetRPM/0.25*10.0);
+			  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty);
+		  }
+
+		  // Disable Set RPM, Back to Set Duty
+		  else if(MotorControlEnable == 0){
+			  duty = MotorSetDuty*10;
+			  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty);
+		  }
 	  }
   }
   /* USER CODE END 3 */
